@@ -99,7 +99,7 @@ public class MainController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            displayField.setText(String.format("%.4f", result));
+            displayField.setText(String.format("%.2f", result));
         } else if (operation.equals("C")) {
             displayField.clear();
 
