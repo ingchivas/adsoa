@@ -27,29 +27,30 @@
         </rowConstraints>
 
         <TextField fx:id="displayField" alignment="CENTER" editable="false" prefHeight="20.0" GridPane.columnIndex="0" GridPane.columnSpan="4" />
+        <TextArea fx:id="displayArea" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="1" />
 
-        <Button onAction="#onDigitButtonClicked" text="7" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <Button onAction="#onDigitButtonClicked" text="8" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <Button onAction="#onDigitButtonClicked" text="9" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-        <Button onAction="#onOperationButtonClicked" text="/" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+        <Button onAction="#onDigitButtonClicked" text="7" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Button onAction="#onDigitButtonClicked" text="8" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Button onAction="#onDigitButtonClicked" text="9" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <Button onAction="#onOperationButtonClicked" text="/" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
-        <Button onAction="#onDigitButtonClicked" text="4" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <Button onAction="#onDigitButtonClicked" text="5" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        <Button onAction="#onDigitButtonClicked" text="6" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-        <Button onAction="#onOperationButtonClicked" text="*" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+        <Button onAction="#onDigitButtonClicked" text="4" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <Button onAction="#onDigitButtonClicked" text="5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Button onAction="#onDigitButtonClicked" text="6" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+        <Button onAction="#onOperationButtonClicked" text="*" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
-        <Button onAction="#onDigitButtonClicked" text="1" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <Button onAction="#onDigitButtonClicked" text="2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <Button onAction="#onDigitButtonClicked" text="3" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-        <Button onAction="#onOperationButtonClicked" text="-" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+        <Button onAction="#onDigitButtonClicked" text="1" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <Button onAction="#onDigitButtonClicked" text="2" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Button onAction="#onDigitButtonClicked" text="3" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+        <Button onAction="#onOperationButtonClicked" text="-" GridPane.columnIndex="3" GridPane.rowIndex="4" />
 
-        <Button onAction="#onDigitButtonClicked" text="0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-        <Button onAction="#onOperationButtonClicked" text="=" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-        <Button onAction="#onOperationButtonClicked" text="+" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-        <Button onAction="#onDecimalButtonClicked" text="." GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Button onAction="#onDigitButtonClicked" text="0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+        <Button onAction="#onOperationButtonClicked" text="=" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+        <Button onAction="#onOperationButtonClicked" text="+" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+        <Button onAction="#onDecimalButtonClicked" text="." GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-        <Button onAction="#onClearButtonClicked" text="C" GridPane.columnIndex="5" GridPane.columnSpan="1" GridPane.rowIndex="1" />
-        <Button onAction="#onBackspaceButtonClicked" text="←" textOverrun="CLIP" GridPane.columnIndex="5" GridPane.columnSpan="1" GridPane.rowIndex="2" />
+        <Button onAction="#onClearButtonClicked" text="C" GridPane.columnIndex="5" GridPane.columnSpan="1" GridPane.rowIndex="2" />
+        <Button onAction="#onBackspaceButtonClicked" text="←" textOverrun="CLIP" GridPane.columnIndex="5" GridPane.columnSpan="1" GridPane.rowIndex="3" />
 
     </GridPane>
 

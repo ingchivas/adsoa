@@ -16,13 +16,10 @@ public class ADSOAMain extends Application {
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setTitle("ADSOA!");
         stage.setScene(scene);
-        APICalc.main(null);
         stage.show();
     }
 
     public static void main(String[] args) {
         launch();
-//        Run the api
-
     }
 }
