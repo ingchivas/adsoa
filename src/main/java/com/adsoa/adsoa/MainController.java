@@ -12,6 +12,10 @@ public class MainController {
     public TextField displayField;
     public TextArea displayArea;
 
+
+    private void initialize() {
+
+    }
     @FXML
     private void onDigitButtonClicked(ActionEvent event) {
         Button digitButton = (Button) event.getSource();
@@ -24,24 +28,34 @@ public class MainController {
         String operation = operationButton.getText();
         if (operation.equals("=")) {
             String expression = displayField.getText();
+            displayArea.clear();
 
             double result = 0;
+            int ammonutOfServers = 0;
 //            Make request to the /calc endpoint
             try {
                 CalcClient client = new CalcClient();
                 client.startConnection("127.0.0.1", 6969);
+                displayArea.appendText("Connected to middleware on 127.0.0.1 on port 6969\n");
+                displayArea.appendText("Sending expression to middleware: " + expression + "\n");
                 String response = client.sendMessage(expression);
+                displayArea.appendText("Response: \n" + response + "\n");
 //                The response is in this format: {server2=4.0, server1=4.0}
                 String[] servers = response.substring(1, response.length() - 1).split(", ");
 
 //                Show the result from each server in the text area
+
+                // Show the expression sent to the middleware
+                // displayArea.appendText("Expression: " + expression + "\n");
                 for (String server : servers) {
                     String[] serverResult = server.split("=");
-                    displayArea.appendText(serverResult[0] + ": " + serverResult[1] + "\n");
+                    // displayArea.appendText(serverResult[0] + ": " + serverResult[1] + "\n");
 //                    For the result, display the average of the results from all servers
                     result += Double.parseDouble(serverResult[1]);
+                    ammonutOfServers++;
 
                 }
+
 
                 client.stopConnection();
             } catch (Exception e) {
@@ -53,7 +67,7 @@ public class MainController {
                 e.printStackTrace();
 
             }
-            displayField.setText(String.format("%.2f", result / 2));
+            displayField.setText(String.format("%.2f", result / ammonutOfServers));
         } else if (operation.equals("C")) {
             displayField.clear();
 
