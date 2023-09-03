@@ -1,6 +1,7 @@
 package com.adsoa.adsoa;
 
 import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -9,12 +10,80 @@ import java.io.*;
 
 
 public class MainController {
+    static class CalcClient extends Thread {
+        private Socket clientSocket;
+        private PrintWriter out;
+        private BufferedReader in;
+        private TextArea displayArea;
+
+        private TextField displayField;
+        private String message;
+
+        public CalcClient(TextArea displayArea, TextField displayField) {
+            this.displayArea = displayArea;
+            this.displayField = displayField;
+        }
+
+        public void run() {
+            try {
+                startConnection("127.0.0.1", 6969);
+                while (true) {
+                    if (message != null) {
+                        out.println(message);
+                        message = null;
+                    }
+                    if (in.ready()) {
+                        String response = in.readLine();
+                        Platform.runLater(() -> displayArea.appendText("Response: \n" + response + "\n"));
+                        // Response comes in this format {server3=9.0, server2=9.0, server1=9.0} so we need to parse it
+                        // the result is the average of all the servers
+
+                        double result = 0;
+
+                        String[] operands = response.substring(response.indexOf("{") + 1, response.indexOf("}")).split(", ");
+                        for (String operand : operands) {
+                            result += Double.parseDouble(operand.substring(operand.indexOf("=") + 1));
+                        }
+
+                        result /= operands.length;
+
+                        double finalResult = result;
+                        Platform.runLater(() -> displayField.setText(String.valueOf(finalResult)));
+
+
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void startConnection(String ip, int port) throws IOException {
+            clientSocket = new Socket(ip, port);
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        }
+
+        public void sendMessage(String msg) {
+            message = msg;
+        }
+
+        public void stopConnection() throws IOException {
+            in.close();
+            out.close();
+            clientSocket.close();
+        }
+    }
+
+
     public TextField displayField;
     public TextArea displayArea;
+    private CalcClient client;
 
-
+    @FXML
     private void initialize() {
-
+        client = new CalcClient(displayArea, displayField);
+        client.start();
     }
     @FXML
     private void onDigitButtonClicked(ActionEvent event) {
@@ -34,30 +103,8 @@ public class MainController {
             int ammonutOfServers = 0;
 //            Make request to the /calc endpoint
             try {
-                CalcClient client = new CalcClient();
-                client.startConnection("127.0.0.1", 6969);
-                displayArea.appendText("Connected to middleware on 127.0.0.1 on port 6969\n");
                 displayArea.appendText("Sending expression to middleware: " + expression + "\n");
-                String response = client.sendMessage(expression);
-                displayArea.appendText("Response: \n" + response + "\n");
-//                The response is in this format: {server2=4.0, server1=4.0}
-                String[] servers = response.substring(1, response.length() - 1).split(", ");
-
-//                Show the result from each server in the text area
-
-                // Show the expression sent to the middleware
-                // displayArea.appendText("Expression: " + expression + "\n");
-                for (String server : servers) {
-                    String[] serverResult = server.split("=");
-                    // displayArea.appendText(serverResult[0] + ": " + serverResult[1] + "\n");
-//                    For the result, display the average of the results from all servers
-                    result += Double.parseDouble(serverResult[1]);
-                    ammonutOfServers++;
-
-                }
-
-
-                client.stopConnection();
+                client.sendMessage(expression);
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -67,7 +114,6 @@ public class MainController {
                 e.printStackTrace();
 
             }
-            displayField.setText(String.format("%.2f", result / ammonutOfServers));
         } else if (operation.equals("C")) {
             displayField.clear();
 
