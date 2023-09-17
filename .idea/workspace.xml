@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af53e816-5d9b-4f60-8028-ce963dba1698" name="Changes" comment="Yes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/adsoa/adsoa/EncoderDecoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/adsoa/adsoa/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adsoa/adsoa/MainController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +53,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.adsoa.adsoa" />
+    </key>
+  </component>
   <component name="RunManager" selected="Compound.MultiplesClientes">
     <configuration name="CalcClient1" type="Application" factoryName="Application" singleton="false">
       <option name="MAIN_CLASS_NAME" value="com.adsoa.adsoa.ADSOAMain" />
@@ -104,7 +113,13 @@
       <workItem from="1693676101004" duration="660000" />
       <workItem from="1693690662371" duration="658000" />
       <workItem from="1693691364819" duration="593000" />
-      <workItem from="1693752386663" duration="4343000" />
+      <workItem from="1693752386663" duration="4528000" />
+      <workItem from="1694117612431" duration="677000" />
+      <workItem from="1694556694399" duration="648000" />
+      <workItem from="1694642960725" duration="1081000" />
+      <workItem from="1694741116340" duration="807000" />
+      <workItem from="1694817935793" duration="1659000" />
+      <workItem from="1694882664649" duration="9859000" />
     </task>
     <task id="LOCAL-00001" summary="Yes">
       <option name="closed" value="true" />
@@ -154,7 +169,15 @@
       <option name="project" value="LOCAL" />
       <updated>1693757725043</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Yes">
+      <option name="closed" value="true" />
+      <created>1693758002444</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1693758002444</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

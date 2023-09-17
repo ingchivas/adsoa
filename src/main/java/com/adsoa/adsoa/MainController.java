@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 
 import java.net.*;
 import java.io.*;
+import java.util.Arrays;
 
 
 public class MainController {
@@ -35,21 +36,38 @@ public class MainController {
                     if (in.ready()) {
                         String response = in.readLine();
                         Platform.runLater(() -> displayArea.appendText("Response: \n" + response + "\n"));
-                        // Response comes in this format {server3=9.0, server2=9.0, server1=9.0} so we need to parse it
-                        // the result is the average of all the servers
+                        EncoderDecoder ed = new EncoderDecoder();
 
-                        double result = 0;
+                        // Response comes like this
+                        // {server3=c5.0, server2=c5.0, server1=c5.0}
 
-                        String[] operands = response.substring(response.indexOf("{") + 1, response.indexOf("}")).split(", ");
-                        for (String operand : operands) {
-                            result += Double.parseDouble(operand.substring(operand.indexOf("=") + 1));
+                        // Remove the curly braces
+                        String[] servers = response.substring(1, response.length() - 1).split(", ");
+
+                        Double[] decodedResults = new Double[servers.length];
+
+                        // Decode the results from each server
+                        for (String server : servers) {
+                            String[] serverResult = server.split("=");
+                            String serverName = serverResult[0];
+                            String result = serverResult[1];
+                            Platform.runLater(() -> displayArea.appendText("Server " + serverName + " result: " + ed.decode(result.getBytes()) + "\n"));
+                            // To get the result, remove the code 99| from the beginning of the decoded result and convert it to a double
+                            decodedResults[Integer.parseInt(serverName.substring(6)) - 1] = Double.parseDouble(ed.decode(result.getBytes()).substring(3));
                         }
 
-                        result /= operands.length;
+                        // Calculate the average of the results
+                        double average = 0;
+                        for (double result : decodedResults) {
+                            average += result;
+                        }
+                        average /= decodedResults.length;
+                        double finalAverage = average;
+                        Platform.runLater(() -> displayArea.appendText("Average: " + finalAverage + "\n"));
+                        // Clear the display field and display the average
+                        Platform.runLater(() -> displayField.clear());
 
-                        double finalResult = result;
-                        Platform.runLater(() -> displayField.setText(String.valueOf(finalResult)));
-
+                        Platform.runLater(() -> displayField.setText(String.valueOf(finalAverage)));
 
                     }
                 }
@@ -93,6 +111,7 @@ public class MainController {
 
     @FXML
     private void onOperationButtonClicked(ActionEvent event) {
+        EncoderDecoder ed = new EncoderDecoder();
         Button operationButton = (Button) event.getSource();
         String operation = operationButton.getText();
         if (operation.equals("=")) {
@@ -104,7 +123,8 @@ public class MainController {
 //            Make request to the /calc endpoint
             try {
                 displayArea.appendText("Sending expression to middleware: " + expression + "\n");
-                client.sendMessage(expression);
+                byte[] encodedOperation = ed.encodeOperation(expression);
+                client.sendMessage(new String(encodedOperation));
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
