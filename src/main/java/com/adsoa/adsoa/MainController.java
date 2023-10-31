@@ -38,22 +38,18 @@ public class MainController {
                         Platform.runLater(() -> displayArea.appendText("Response: \n" + response + "\n"));
                         EncoderDecoder ed = new EncoderDecoder();
 
-                        // Response comes like this
-                        // {server3=c5.0, server2=c5.0, server1=c5.0}
-
-                        // Remove the curly braces
                         String[] servers = response.substring(1, response.length() - 1).split(", ");
 
                         Double[] decodedResults = new Double[servers.length];
 
                         // Decode the results from each server
-                        for (String server : servers) {
-                            String[] serverResult = server.split("=");
+                        for (int i = 0; i < servers.length; i++) {
+                            String[] serverResult = servers[i].split("=");
                             String serverName = serverResult[0];
-                            String result = serverResult[1];
-                            Platform.runLater(() -> displayArea.appendText("Server " + serverName + " result: " + ed.decode(result.getBytes()) + "\n"));
-                            // To get the result, remove the code 99| from the beginning of the decoded result and convert it to a double
-                            decodedResults[Integer.parseInt(serverName.substring(6)) - 1] = Double.parseDouble(ed.decode(result.getBytes()).substring(3));
+                            double decodedResult = Double.parseDouble(serverResult[1]);
+                            decodedResults[i] = decodedResult;
+
+                            Platform.runLater(() -> displayArea.appendText("Server " + serverName + " result: " + decodedResult + "\n"));
                         }
 
                         // Calculate the average of the results
@@ -64,9 +60,8 @@ public class MainController {
                         average /= decodedResults.length;
                         double finalAverage = average;
                         Platform.runLater(() -> displayArea.appendText("Average: " + finalAverage + "\n"));
-                        // Clear the display field and display the average
-                        Platform.runLater(() -> displayField.clear());
 
+                        // Display the average
                         Platform.runLater(() -> displayField.setText(String.valueOf(finalAverage)));
 
                     }
@@ -75,6 +70,7 @@ public class MainController {
                 e.printStackTrace();
             }
         }
+
 
         public void startConnection(String ip, int port) throws IOException {
             clientSocket = new Socket(ip, port);

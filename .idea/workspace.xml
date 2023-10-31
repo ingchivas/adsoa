@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af53e816-5d9b-4f60-8028-ce963dba1698" name="Changes" comment="Yes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/adsoa/adsoa/EncoderDecoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/adsoa/adsoa/EncoderDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adsoa/adsoa/EncoderDecoder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/adsoa/adsoa/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adsoa/adsoa/MainController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -120,6 +119,10 @@
       <workItem from="1694741116340" duration="807000" />
       <workItem from="1694817935793" duration="1659000" />
       <workItem from="1694882664649" duration="9859000" />
+      <workItem from="1698596922428" duration="267000" />
+      <workItem from="1698598217936" duration="8858000" />
+      <workItem from="1698613169741" duration="3471000" />
+      <workItem from="1698762741823" duration="1257000" />
     </task>
     <task id="LOCAL-00001" summary="Yes">
       <option name="closed" value="true" />
