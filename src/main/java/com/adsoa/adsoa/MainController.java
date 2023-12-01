@@ -13,12 +13,11 @@ import java.util.Arrays;
 public class MainController {
     static class CalcClient extends Thread {
         private Socket clientSocket;
-        private PrintWriter out;
-        private BufferedReader in;
+        private OutputStream out; // Declare here, but don't initialize yet
+        private BufferedReader in; // Declare here, but don't initialize yet
         private TextArea displayArea;
-
         private TextField displayField;
-        private String message;
+        private byte[] message;
 
         public CalcClient(TextArea displayArea, TextField displayField) {
             this.displayArea = displayArea;
@@ -30,7 +29,7 @@ public class MainController {
                 startConnection("127.0.0.1", 6969);
                 while (true) {
                     if (message != null) {
-                        out.println(message);
+                        out.write(message, 0, message.length);
                         message = null;
                     }
                     if (in.ready()) {
@@ -74,11 +73,11 @@ public class MainController {
 
         public void startConnection(String ip, int port) throws IOException {
             clientSocket = new Socket(ip, port);
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            out = clientSocket.getOutputStream();
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         }
 
-        public void sendMessage(String msg) {
+        public void sendMessage(byte[] msg) {
             message = msg;
         }
 
@@ -95,7 +94,7 @@ public class MainController {
     private CalcClient client;
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException {
         client = new CalcClient(displayArea, displayField);
         client.start();
     }
@@ -106,7 +105,7 @@ public class MainController {
     }
 
     @FXML
-    private void onOperationButtonClicked(ActionEvent event) {
+    public void onOperationButtonClicked(ActionEvent event) {
         EncoderDecoder ed = new EncoderDecoder();
         Button operationButton = (Button) event.getSource();
         String operation = operationButton.getText();
@@ -115,12 +114,11 @@ public class MainController {
             displayArea.clear();
 
             double result = 0;
-            int ammonutOfServers = 0;
-//            Make request to the /calc endpoint
+            int amountOfServers = 0;
             try {
                 displayArea.appendText("Sending expression to middleware: " + expression + "\n");
-                byte[] encodedOperation = ed.encodeOperation(expression);
-                client.sendMessage(new String(encodedOperation));
+                byte[] encodedOperation = ed.encodeArithmeticOperation(expression, "abc");
+                client.sendMessage(encodedOperation);
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -128,7 +126,6 @@ public class MainController {
                 alert.setContentText("Error connecting to server");
                 alert.showAndWait();
                 e.printStackTrace();
-
             }
         } else if (operation.equals("C")) {
             displayField.clear();
