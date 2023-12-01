@@ -7,21 +7,35 @@ import javafx.scene.control.*;
 
 import java.net.*;
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 
 public class MainController {
     static class CalcClient extends Thread {
         private Socket clientSocket;
-        private OutputStream out; // Declare here, but don't initialize yet
-        private BufferedReader in; // Declare here, but don't initialize yet
+        private OutputStream out;
+        private BufferedReader in;
         private TextArea displayArea;
         private TextField displayField;
         private byte[] message;
 
-        public CalcClient(TextArea displayArea, TextField displayField) {
+        private ConcurrentHashMap<Short, ConcurrentLinkedQueue<byte[]>> operationQueues;
+        private ExecutorService messageDispatcher;
+
+        public CalcClient(TextArea displayArea, TextField displayField,
+                          ConcurrentHashMap<Short, ConcurrentLinkedQueue<byte[]>> operationQueues,
+                          ExecutorService messageDispatcher) {
             this.displayArea = displayArea;
             this.displayField = displayField;
+            this.operationQueues = operationQueues;
+            this.messageDispatcher = messageDispatcher;
         }
 
         public void run() {
@@ -78,8 +92,38 @@ public class MainController {
         }
 
         public void sendMessage(byte[] msg) {
-            message = msg;
+            ByteBuffer buffer = ByteBuffer.wrap(msg);
+            short operationType = buffer.getShort();
+            operationQueues.get(operationType).add(msg);
         }
+
+        public void sendMessageDirectly(byte[] msg) throws IOException {
+            out.write(msg, 0, msg.length);
+        }
+
+        private void startMessageDispatcher() {
+            messageDispatcher.submit(() -> {
+                while (!Thread.currentThread().isInterrupted()) {
+                    operationQueues.forEach((operationType, queue) -> {
+                        byte[] message = queue.poll();
+                        if (message != null) {
+                            try {
+                                client.sendMessageDirectly(message);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    try {
+                        Thread.sleep(100); // Avoid CPU overuse
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            });
+        }
+
+
 
         public void stopConnection() throws IOException {
             in.close();
@@ -91,13 +135,26 @@ public class MainController {
 
     public TextField displayField;
     public TextArea displayArea;
-    private CalcClient client;
+    private static CalcClient client;
+
+    private ConcurrentHashMap<Short, ConcurrentLinkedQueue<byte[]>> operationQueues = new ConcurrentHashMap<>();
+    private ExecutorService messageDispatcher = Executors.newSingleThreadExecutor();
+
 
     @FXML
     private void initialize() throws IOException {
-        client = new CalcClient(displayArea, displayField);
+        // Initialize queues for each operation type
+        operationQueues.put((short) 1, new ConcurrentLinkedQueue<>());
+        operationQueues.put((short) 2, new ConcurrentLinkedQueue<>());
+        operationQueues.put((short) 3, new ConcurrentLinkedQueue<>());
+        operationQueues.put((short) 4, new ConcurrentLinkedQueue<>());
+
+        // Start client and dispatcher
+        client = new CalcClient(displayArea, displayField, operationQueues, messageDispatcher);
         client.start();
+        client.startMessageDispatcher();
     }
+
     @FXML
     private void onDigitButtonClicked(ActionEvent event) {
         Button digitButton = (Button) event.getSource();
@@ -163,4 +220,6 @@ public class MainController {
             displayField.setText(expression.substring(0, expression.length() - 1));
         }
     }
+
+
 }

@@ -101,7 +101,7 @@ public class EncoderDecoder {
                 operator = "/";
                 break;
             default:
-                throw new IllegalArgumentException("Invalid operation type: " + operationType);
+                throw new IllegalArgumentException("Invalid operation type for arithmetic operation: " + operationType);
         }
         return numberOne + " " + operator + " " + numberTwo;
     }
